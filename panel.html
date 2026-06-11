@@ -95,11 +95,11 @@
       flex-wrap: wrap;
       box-shadow: 0 1px 0.25em rgba(0, 0, 0, 0.06);
     }
-    /* Le aplicamos margen a todos los elementos hijos directos */
+
     .status-bar > * {
       margin-right: 1.125em;
     }
-    /* Le quitamos el margen al último para que no sume espacio innecesario */
+
     .status-bar > *:last-child {
       margin-right: 0;
     }
@@ -184,7 +184,6 @@
     .filter-group {
       display: flex;
       align-items: center;
-      gap: 0.5em;
     }
 
     .filter-label {
@@ -1124,26 +1123,28 @@
     function getAsistentesEnLabo(d, b) { var r = []; for (var i = 0; i < ASISTENTES.length; i++) { var a = ASISTENTES[i]; if (a.dayIdx === d && a.bloque === b && a.enLabo) r.push(a); } return r; }
     function getAsistenteDeCurso(d, b, c) { for (var i = 0; i < ASISTENTES.length; i++) { var a = ASISTENTES[i]; if (a.dayIdx === d && a.bloque === b && a.curso === c && !a.enLabo) return a; } return null; }
     function esMateriaInfo(materia) {
-      return [
+      var materias = [
         'TI',
-        'TEI', 
+        'TEI',
         'PROG',
         'EFSI',
         'EFSI II',
         'IMAGEN',
         'BD',
         'SEMINARIO',
-        'HISTORIA', 
+        'HISTORIA',
         'ARTE',
-        'PDP', 
+        'PDP',
         'DAI',
         'SSI'
-      ].includes(materia);
+      ];
+
+      return materias.indexOf(materia) !== -1;
     }
     function esAulaInfo(aula) {
       if (!aula) return false;
 
-      return [
+      var aulas = [
         'CIDI',
         'CIDI IZQ',
         'CIDI DER',
@@ -1152,9 +1153,15 @@
         'CEO',
         'AMI',
         '4002'
-      ].some(function(nombre) {
-        return aula.includes(nombre);
-      });
+      ];
+
+      for (var i = 0; i < aulas.length; i++) {
+        if (aula.indexOf(aulas[i]) !== -1) {
+          return true;
+        }
+      }
+
+      return false;
     }
 
     function renderTable(dayIdx, currentSlot) {

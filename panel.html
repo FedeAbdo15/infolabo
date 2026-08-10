@@ -84,6 +84,7 @@
       opacity: 0.9;
     }
 
+    /*---------------------------------------------------------------*/
     .status-bar {
       background: white;
       border: 2px solid #e2e8f0;
@@ -92,7 +93,7 @@
       margin: 0.5em 1.5em;
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       box-shadow: 0 1px 0.25em rgba(0, 0, 0, 0.06);
     }
 
@@ -159,11 +160,12 @@
       color: #1e293b;
     }
 
+    /*---------------------------------------------------------------*/
     .filters {
       display: flex;
-      margin: 0 1.5em 0.3em;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      margin-left: auto;
     }
     .filters > * {
       margin-right: 1em;
@@ -252,13 +254,12 @@
     .schedule-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1.4vh;
+      font-size: 1.4vh; /* Tu tamaño original intacto */
       table-layout: fixed;
       background: white;
       border-radius: 0.625em;
       overflow: hidden;
       box-shadow: 0 1px 0.25em rgba(0, 0, 0, 0.06);
-      
     }
 
     .schedule-table th {
@@ -357,10 +358,9 @@
 
     .aula-labo {
       background: #fff;
-      color: #9d7cfd;
       border-width: 1px;
       border-style: solid;
-      border-color: #9d7cfd;
+      color: #1a56db;
       font-weight: 700;
       border-radius: 20px;
     }
@@ -611,40 +611,41 @@
     <div class="status-info" id="status-info"></div>
     <div class="divider" id="divider-next"></div>
     <div class="status-info" id="status-next"></div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <span class="filter-label">Dia:</span>
+        <select class="filter-select" id="day-select" onchange="onDayChange()">
+          <option value="auto">Hoy (Auto)</option>
+          <option value="1">Lunes</option>
+          <option value="2">Martes</option>
+          <option value="3">Miercoles</option>
+          <option value="4">Jueves</option>
+          <option value="5">Viernes</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Vista:</span>
+        <select class="filter-select" id="curso-select" onchange="onCursoChange()">
+          <option value="all">Todos los cursos</option>
+          <option value="3A">3A</option>
+          <option value="3B">3B</option>
+          <option value="3C">3C</option>
+          <option value="3D">3D</option>
+          <option value="4A">4A</option>
+          <option value="4B">4B</option>
+          <option value="4C">4C</option>
+          <option value="5A">5A</option>
+          <option value="5B">5B</option>
+          <option value="5C">5C</option>
+          <option value="5D">5D</option>
+          <option value="5E">5E</option>
+        </select>
+      </div>
+      <button class="btn-today" id="btn-today" onclick="resetToToday()">Volver a Hoy</button><div id="space-text" class="space-text"></div>
+    </div>
   </div>
 
-  <div class="filters">
-    <div class="filter-group">
-      <span class="filter-label">Dia:</span>
-      <select class="filter-select" id="day-select" onchange="onDayChange()">
-        <option value="auto">Hoy (Auto)</option>
-        <option value="1">Lunes</option>
-        <option value="2">Martes</option>
-        <option value="3">Miercoles</option>
-        <option value="4">Jueves</option>
-        <option value="5">Viernes</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <span class="filter-label">Vista:</span>
-      <select class="filter-select" id="curso-select" onchange="onCursoChange()">
-        <option value="all">Todos los cursos</option>
-        <option value="3A">3A</option>
-        <option value="3B">3B</option>
-        <option value="3C">3C</option>
-        <option value="3D">3D</option>
-        <option value="4A">4A</option>
-        <option value="4B">4B</option>
-        <option value="4C">4C</option>
-        <option value="5A">5A</option>
-        <option value="5B">5B</option>
-        <option value="5C">5C</option>
-        <option value="5D">5D</option>
-        <option value="5E">5E</option>
-      </select>
-    </div>
-    <button class="btn-today" id="btn-today" onclick="resetToToday()">Volver a Hoy</button><div id="space-text" class="space-text"></div>
-  </div>
 
   <div class="main">
     <div id="weekend-msg" class="weekend-msg" style="display:none;">
@@ -678,7 +679,7 @@
       { n: 2, label: 'Bloque 2', start: '09:20', end: '10:40', type: 'block' },
       { n: null, label: 'Recreo', start: '10:40', end: '10:55', type: 'break' },
       { n: 3, label: 'Bloque 3', start: '10:55', end: '12:15', type: 'block' },
-      { n: null, label: 'Almuerzo', start: '12:15', end: '13:10', type: 'break' },
+      { n: null, label: 'Almuerzo', start: '12:15', end: '13:10', type: 'lunch' },
       { n: 4, label: 'Bloque 4', start: '13:10', end: '14:30', type: 'block' },
       { n: null, label: 'Recreo', start: '14:30', end: '14:40', type: 'break' },
       { n: 5, label: 'Bloque 5', start: '14:40', end: '16:00', type: 'block' },
@@ -736,8 +737,8 @@
       { dayIdx: 1, bloque: 4, curso: "3B", materia: "PROG", aula: "AMI", profesor: "Olivera" },
       { dayIdx: 1, bloque: 4, curso: "3C", materia: "FUENTES", aula: "1105", profesor: "Chojrin" },
       { dayIdx: 1, bloque: 4, curso: "3D", materia: "PROG", aula: "HMP / CIDI IZQ", profesor: "Stancanelli" },
-      { dayIdx: 1, bloque: 4, curso: "4A", materia: "EFSI", aula: "1303 / CIDI DER", profesor: "Arias / Flaminio" },
-      { dayIdx: 1, bloque: 4, curso: "4B", materia: "BD", aula: "LUM", profesor: "Rodriguez" },
+      { dayIdx: 1, bloque: 4, curso: "4A", materia: "EFSI", aula: "LUM", profesor: "Arias / Flaminio" },
+      { dayIdx: 1, bloque: 4, curso: "4B", materia: "BD", aula: "CIDI DER", profesor: "Rodriguez" },
       { dayIdx: 1, bloque: 4, curso: "5A", materia: "QUIMICA", aula: "1302", profesor: "Stark" },
       { dayIdx: 1, bloque: 4, curso: "5B", materia: "MATEMATICA", aula: "1304", profesor: "Lacusant" },
       { dayIdx: 1, bloque: 4, curso: "5C", materia: "MATEMATICA", aula: "1106", profesor: "Romano" },
@@ -748,12 +749,12 @@
       { dayIdx: 1, bloque: 5, curso: "3B", materia: "PROG", aula: "AMI", profesor: "Olivera" },
       { dayIdx: 1, bloque: 5, curso: "3C", materia: "MATEMATICA", aula: "1105", profesor: "Bica Diaz" },
       { dayIdx: 1, bloque: 5, curso: "3D", materia: "PROG", aula: "HMP / CIDI IZQ", profesor: "Stancanelli" },
-      { dayIdx: 1, bloque: 5, curso: "4A", materia: "EFSI", aula: "LUM / CIDI DER", profesor: "Arias" },
+      { dayIdx: 1, bloque: 5, curso: "4A", materia: "EFSI", aula: "LUM", profesor: "Arias" },
       { dayIdx: 1, bloque: 5, curso: "4B", materia: "GEOGRAFIA", aula: "1303", profesor: "Baigorria" },
       { dayIdx: 1, bloque: 5, curso: "5A", materia: "H.JUDIA", aula: "1302", profesor: "Jmelnizky" },
       { dayIdx: 1, bloque: 5, curso: "5B", materia: "ED.FISICA", aula: "Gimnasio", profesor: "Slaibe" },
       { dayIdx: 1, bloque: 5, curso: "5D", materia: "EFSI II", aula: "CEO", profesor: "Peña" },
-      { dayIdx: 1, bloque: 5, curso: "5E", materia: "QUIMICA", aula: "", profesor: "" },
+      { dayIdx: 1, bloque: 5, curso: "5E", materia: "QUIMICA", aula: "1104", profesor: "Stark" },
       // LUNES - Bloque 6
       { dayIdx: 1, bloque: 6, curso: "3A", materia: "INGLES", aula: "1103", profesor: "" },
       { dayIdx: 1, bloque: 6, curso: "3B", materia: "INGLES", aula: "1104", profesor: "" },
@@ -834,7 +835,7 @@
       { dayIdx: 3, bloque: 1, curso: "3A", materia: "FISICA", aula: "4210", profesor: "Failache" },
       { dayIdx: 3, bloque: 1, curso: "3B", materia: "MATEMATICA", aula: "1104", profesor: "Lacusant" },
       { dayIdx: 3, bloque: 1, curso: "3C", materia: "TI", aula: "1105", profesor: "Stancanelli / Ceriana" },
-      { dayIdx: 3, bloque: 1, curso: "3D", materia: "ECONOMIA", aula: "1106", profesor: "" },
+      { dayIdx: 3, bloque: 1, curso: "3D", materia: "ECONOMIA", aula: "1106", profesor: "Farbiarz" },
       { dayIdx: 3, bloque: 1, curso: "4A", materia: "PROG", aula: "1303 / CIDI IZQ", profesor: "Binker" },
       { dayIdx: 3, bloque: 1, curso: "4B", materia: "PROG", aula: "1304 / CIDI DER", profesor: "Kristal" },
       { dayIdx: 3, bloque: 1, curso: "4C", materia: "PROG", aula: "HMP", profesor: "Jolodovsky" },
@@ -989,7 +990,7 @@
       { dayIdx: 5, bloque: 1, curso: "ARTE", materia: "2E/2M", aula: "AULA", profesor: "Flaminio" },
       // VIERNES - Bloque 2
       { dayIdx: 5, bloque: 2, curso: "3A", materia: "H.JUDIA", aula: "1103", profesor: "Wolfus" },
-      { dayIdx: 5, bloque: 2, curso: "3B", materia: "ECONOMIA", aula: "1104", profesor: "" },
+      { dayIdx: 5, bloque: 2, curso: "3B", materia: "ECONOMIA", aula: "1104", profesor: "Toimaher" },
       { dayIdx: 5, bloque: 2, curso: "3C", materia: "LENGUA", aula: "1105", profesor: "Bochatay" },
       { dayIdx: 5, bloque: 2, curso: "3D", materia: "FISICA", aula: "4210", profesor: "Galperin" },
       { dayIdx: 5, bloque: 2, curso: "4A", materia: "H.JUDIA", aula: "1303", profesor: "Marchi" },
@@ -1009,7 +1010,7 @@
       { dayIdx: 5, bloque: 3, curso: "4B", materia: "FISICA", aula: "1302", profesor: "Samper" },
       { dayIdx: 5, bloque: 3, curso: "4C", materia: "MATEMATICA", aula: "1301", profesor: "Contreras" },
       { dayIdx: 5, bloque: 3, curso: "5A", materia: "DAI", aula: "AMI", profesor: "Peña / Goldfeld" },
-      { dayIdx: 5, bloque: 3, curso: "5B", materia: "DAI", aula: "CEO", profesor: "Rodriguez" },
+      { dayIdx: 5, bloque: 3, curso: "5B", materia: "DAI", aula: "CEO", profesor: "Rodriguez / Auday" },
       { dayIdx: 5, bloque: 3, curso: "5C", materia: "PDP", aula: "CIDI IZQ", profesor: "Roitman" },
       { dayIdx: 5, bloque: 3, curso: "5D", materia: "PDP", aula: "CIDI DER", profesor: "Turek" },
       { dayIdx: 5, bloque: 3, curso: "5E", materia: "DAI", aula: "HMP", profesor: "Abdo / Ulman" },
@@ -1026,12 +1027,20 @@
       { dayIdx: 5, bloque: 4, curso: "5D", materia: "LENGUA", aula: "1302", profesor: "Marti" },
       // VIERNES - Bloque 5
       { dayIdx: 5, bloque: 5, curso: "3B", materia: "GEOGRAFIA", aula: "1104", profesor: "Baigorria" },
-      { dayIdx: 5, bloque: 5, curso: "3C", materia: "ECONOMIA", aula: "1105", profesor: "" },
+      { dayIdx: 5, bloque: 5, curso: "3C", materia: "ECONOMIA", aula: "1105", profesor: "Toimaher" },
       { dayIdx: 5, bloque: 5, curso: "4B", materia: "EFSI", aula: "CEO", profesor: "Zapolski" },
       { dayIdx: 5, bloque: 5, curso: "4C", materia: "BD", aula: "LUM", profesor: "Auday" },
       { dayIdx: 5, bloque: 5, curso: "5A", materia: "FUENTES", aula: "1303", profesor: "Faur" },
       { dayIdx: 5, bloque: 5, curso: "5B", materia: "QUIMICA", aula: "1304", profesor: "Otero" }
     ];
+
+    var ENCARGADOS_MEDIODIA = {
+      1: "(12:15-12:40): Fede | (12:40-13:10): Marto y Delfi",
+      2: "(12:15-12:40): Delfi | (12:40-13:10): Jesi",
+      3: "(12:15-12:40): Johi y Fede | (12:40-13:10): Delfi",
+      4: "(12:15-12:40): Fede | (12:40-13:10): Jesi",
+      5: "(12:15-12:40): Delfi | (12:40-13:10): Johi"
+    };
 
     var ASISTENTES = [
       // JESI
@@ -1100,6 +1109,7 @@
       { dayIdx: 5, bloque: 2, nombre: "DELFI", enLabo: true, curso: "" },
       { dayIdx: 5, bloque: 3, nombre: "DELFI", enLabo: true, curso: "" },
       // MARTO
+      { dayIdx: 1, bloque: 1, nombre: "MARTO", enLabo: false, curso: "3A" },
       { dayIdx: 1, bloque: 2, nombre: "MARTO", enLabo: true, curso: "" },
       { dayIdx: 1, bloque: 3, nombre: "MARTO", enLabo: true, curso: "" },
       { dayIdx: 1, bloque: 4, nombre: "MARTO", enLabo: false, curso: "3B"},
@@ -1171,46 +1181,84 @@
     }
 
     function renderTable(dayIdx, currentSlot) {
-      var curBn = currentSlot ? currentSlot.n : null;
+      var currentLabel = currentSlot ? currentSlot.label : null;
+      var currentStart = currentSlot ? currentSlot.start : null;
+      
       var headHtml = '<tr><th>Bloque</th>';
       for (var c = 0; c < CURSOS.length; c++) headHtml += '<th>' + CURSOS[c] + '</th>';
       headHtml += '<th class="arte">Arte</th><th class="labo">Labo</th></tr>';
       document.getElementById('table-head').innerHTML = headHtml;
+      
       var bodyHtml = '';
-      for (var b = 0; b < BLOCK_SLOTS.length; b++) {
-        var blq = BLOCK_SLOTS[b];
-        var isCur = curBn === blq.n;
-        bodyHtml += '<tr' + (isCur ? ' class="current"' : '') + '>';
-        bodyHtml += '<td><span class="bloque-num">' + blq.n + '</span><br><span class="bloque-time">' + blq.start + '</span></td>';
-        for (var c = 0; c < CURSOS.length; c++) {
-          var clase = getClase(dayIdx, blq.n, CURSOS[c]);
-          var asist = clase ? getAsistenteDeCurso(dayIdx, blq.n, CURSOS[c]) : null;
-          bodyHtml += '<td>';
-          if (clase && clase.materia) {
-            bodyHtml += '<span class="materia' + (esMateriaInfo(clase.materia) ? ' materia-info' : '') + '">' + clase.materia + '</span>';
-            if (clase.aula) bodyHtml += '<span class="aula' + (esAulaInfo(clase.aula) ? ' aula-labo' : '') + '">' + clase.aula + '</span>';
-            if (clase.profesor) bodyHtml += '<span class="profesor">' + clase.profesor + '</span>';
-            if (asist) bodyHtml += '<span class="asistente">' + asist.nombre + '</span>';
+      
+      for (var b = 0; b < BLOQUES.length; b++) {
+        var blq = BLOQUES[b];
+        
+        if (blq.type === 'break') {
+          continue;
+        }
+        
+        var isCur = (currentLabel === blq.label && currentStart === blq.start);
+        
+        if (blq.type === 'lunch') {
+          // -----------------------------------------------------------------
+          // FILA DEL MEDIODÍA COMPACTA
+          // -----------------------------------------------------------------
+          var encargadoHoy = ENCARGADOS_MEDIODIA[dayIdx] || "Sin asignar";
+          
+          bodyHtml += '<tr' + (isCur ? ' class="current"' : '') + '>';
+          // Forzamos un padding mínimo de 0.1em vertical para aplastarla
+          bodyHtml += '<td style="padding: 0.1em 0.1em; vertical-align: middle;">';
+          bodyHtml += '  <span class="bloque-num" style="font-size: 0.85em; margin: 0;">-</span>';
+          bodyHtml += '  <span class="bloque-time" style="font-size: 0.65em; display: block;">' + blq.start + '</span>';
+          bodyHtml += '</td>';
+          
+          // Aplicamos el mismo padding mínimo a la celda del encargado
+          bodyHtml += '<td colspan="14" style="vertical-align: middle; background-color: #f8fafc; padding: 0.1em; text-align: center; font-size: 1.1vh; color: #475569;">';
+          bodyHtml += '  <strong>CUBRE:</strong> <span class="asistente" style="font-size: 1.5vh; padding: 0.1em 0.6em; margin: 0; display: inline-block;">' + encargadoHoy + '</span>';
+          bodyHtml += '</td>';
+          bodyHtml += '</tr>';
+          
+        } else {
+          // -----------------------------------------------------------------
+          // FILAS DE MATERIAS NORMALES (Tu diseño original sin cambios)
+          // -----------------------------------------------------------------
+          bodyHtml += '<tr' + (isCur ? ' class="current"' : '') + '>';
+          bodyHtml += '<td><span class="bloque-num">' + blq.n + '</span><br><span class="bloque-time">' + blq.start + '</span></td>';
+          
+          for (var c = 0; c < CURSOS.length; c++) {
+            var clase = getClase(dayIdx, blq.n, CURSOS[c]);
+            var asist = clase ? getAsistenteDeCurso(dayIdx, blq.n, CURSOS[c]) : null;
+            bodyHtml += '<td>';
+            if (clase && clase.materia) {
+              bodyHtml += '<span class="materia' + (esMateriaInfo(clase.materia) ? ' materia-info' : '') + '">' + clase.materia + '</span>';
+              if (clase.aula) bodyHtml += '<span class="aula' + (esAulaInfo(clase.aula) ? ' aula-labo' : '') + '">' + clase.aula + '</span>';
+              if (clase.profesor) bodyHtml += '<span class="profesor">' + clase.profesor + '</span>';
+              if (asist) bodyHtml += '<span class="asistente">' + asist.nombre + '</span>';
+            } else { bodyHtml += '<span class="empty">-</span>'; }
+            bodyHtml += '</td>';
+          }
+          
+          var arte = getArteClase(dayIdx, blq.n);
+          bodyHtml += '<td class="arte-col">';
+          if (arte && arte.materia) {
+            bodyHtml += '<span class="materia' + (esMateriaInfo(arte.materia) ? ' materia-info' : '') + '">' + arte.materia + '</span>';
+            if (arte.aula) bodyHtml += '<span class="aula' + (esAulaInfo(arte.aula) ? ' aula-labo' : '') + '">' + arte.aula + '</span>';
+            if (arte.profesor) bodyHtml += '<span class="profesor">' + arte.profesor + '</span>';
           } else { bodyHtml += '<span class="empty">-</span>'; }
           bodyHtml += '</td>';
+          
+          var enLabo = getAsistentesEnLabo(dayIdx, blq.n);
+          bodyHtml += '<td class="labo-col">';
+          if (enLabo.length > 0) {
+            for (var a = 0; a < enLabo.length; a++) {
+              bodyHtml += '<span class="labo-asist">' + enLabo[a].nombre + '<small>' + (enLabo[a].consulta ? 'Consulta' : 'En lab') + '</small></span> ';
+            }
+          } else { bodyHtml += '<span class="empty">-</span>'; }
+          bodyHtml += '</td></tr>';
         }
-        var arte = getArteClase(dayIdx, blq.n);
-        bodyHtml += '<td class="arte-col">';
-        if (arte && arte.materia) {
-          bodyHtml += '<span class="materia' + (esMateriaInfo(arte.materia) ? ' materia-info' : '') + '">' + arte.materia + '</span>';
-          if (arte.aula) bodyHtml += '<span class="aula' + (esAulaInfo(arte.aula) ? ' aula-labo' : '') + '">' + arte.aula + '</span>';
-          if (arte.profesor) bodyHtml += '<span class="profesor">' + arte.profesor + '</span>';
-        } else { bodyHtml += '<span class="empty">-</span>'; }
-        bodyHtml += '</td>';
-        var enLabo = getAsistentesEnLabo(dayIdx, blq.n);
-        bodyHtml += '<td class="labo-col">';
-        if (enLabo.length > 0) {
-          for (var a = 0; a < enLabo.length; a++) {
-            bodyHtml += '<span class="labo-asist">' + enLabo[a].nombre + '<small>' + (enLabo[a].consulta ? 'Consulta' : 'En lab') + '</small></span> ';
-          }
-        } else { bodyHtml += '<span class="empty">-</span>'; }
-        bodyHtml += '</td></tr>';
       }
+      
       document.getElementById('table-body').innerHTML = bodyHtml;
     }
 
